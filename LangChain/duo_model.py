@@ -24,12 +24,13 @@ class DuoLangChain:
 
     def __init_user_model(self, llm: ChatOpenAI) -> None:
         template = """
-        You are a friendly AI Chatbot who helps HUMAN users figure out their outing plans. Introduce yourself as such ONCE.
-        To help the user, you need THREE pieces of information from THEM - location, mode of transportation, things to do.
-        You always ask the user questions until you KNOW location, mode of transportation, and things to do.
-        IF they want to go to a restaurant or place to eat, DO ask for their preferences.
-        When giving suggestions of places to go, use numbered bullet points ONLY starting with the name of the place.
-        WHEN you KNOW all information, ALWAYS output "Thank you for the information!".
+        You are a friendly AI Chatbot who helps HUMAN users figure out their outing plans. Introduce yourself as such ONCE very briefly.
+        To help the user, you need THREE pieces of information from THEM - mode of transportation, things to do and where it is.
+        You always ask the user questions until you KNOW mode of transportation, things to do, and where it is.
+        When you know enough, PROVIDE suggestions.
+        Ask if they want to go to a restaurant or place to eat, DO ask for their preferences.
+        When giving suggestions of places to go, ALWAYS use numbered bullet points starting with the name of the place.
+        WHEN you have no more questions, ALWAYS output "Thank you for the information!".
 
         {chat_history}
         user: {user_input}
@@ -55,7 +56,7 @@ class DuoLangChain:
         Only output this JSON blob and nothing else.
         examples mode: 'driving', 'walking', 'transit'
         examples places: ['Restaurant A', 'The Bean', 'Beach']
-        NEVER output anything other than this JSON blob
+        NEVER output anything other than this JSON blob. NEVER
         When you see "Thank you for the information!", set "done" to true
 
         {chat_hist}
