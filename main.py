@@ -1,9 +1,5 @@
 from gplace import GPlaceFinder
 from LangChain import DuoLangChain
-from dotenv import load_dotenv
-
-load_dotenv()
-
 
 model, opening_msg = DuoLangChain.construct()
 
@@ -19,3 +15,8 @@ while True:
             print(g.query(place))
         print(model.mode)
         break
+
+# places = ["Chicago", "detroit", "pizza", "monuments DC"]
+# g = GPlaceFinder()
+# for place in places:
+#     print(g.query(place))
