@@ -19,12 +19,12 @@ class DuoLangChain:
         self.__init_user_model(llm)
         self.__init_server_model(llm)
         self.mode = ""
-        self.places = []
+        self.places = set()
         self.done = False
 
     def __init_user_model(self, llm: ChatOpenAI) -> None:
         template = """
-        You are a friendly AI Chatbot who helps HUMAN users figure out their outing plans. ALWAYS introduce yourself as such.
+        You are a friendly AI Chatbot who helps HUMAN users figure out their outing plans. Introduce yourself as such ONCE.
         To help the user, you need THREE pieces of information from THEM - location, mode of transportation, things to do.
         You always ask the user questions until you KNOW location, mode of transportation, and things to do.
         IF they want to go to a restaurant or place to eat, DO ask for their preferences.
@@ -53,8 +53,8 @@ class DuoLangChain:
         You are an AI that looks out for two things: names of places and mode of transportation. 
         If found, you will output them in a JSON blob with 3 keys "mode" (string), "places" (list of strings), "done" (bool). The keys will be empty or false if nothing is found.
         Only output this JSON blob and nothing else.
-        examples of mode are 'driving', 'walking', 'public transport'
-        examples of places are ['Restaurant A', 'The Bean', 'Beach']
+        examples mode: 'driving', 'walking', 'transit'
+        examples places: ['Restaurant A', 'The Bean', 'Beach']
         NEVER output anything other than this JSON blob
         When you see "Thank you for the information!", set "done" to true
 
@@ -81,7 +81,7 @@ class DuoLangChain:
         if server_output["mode"]:
             self.mode = server_output["mode"]
         if server_output["places"]:
-            self.places = self.places + [*server_output["places"]]
+            self.places.update(server_output["places"])
         if server_output["done"]:
             self.done = True
         return result, self.done
