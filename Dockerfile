@@ -17,7 +17,8 @@ COPY requirements.txt .
 RUN pip3 install --upgrade pip && pip install --no-cache-dir -r requirements.txt
 
 # Copy over all files/folders
-COPY test.py .
-COPY .env .
+COPY main.py .
+COPY gplace/ ./gplace/
+COPY LangChain/ ./LangChain/
 
-ENTRYPOINT [ "python3", "test.py"]
+ENTRYPOINT [ "python3", "main.py"]

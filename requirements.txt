@@ -1,4 +1,3 @@
-langchainhub
 langchain
 openai
 google-search-results
