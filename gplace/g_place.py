@@ -17,7 +17,7 @@ class GPlaceFinder:
             else os.environ.get("GPLACES_API_KEY")
         )
 
-    def query(self, query: str, num_return = 3) -> List[dict], bool:
+    def query(self, query: str, num_return = 3) -> List[dict]:
         """Search for information about places or restaurants"""
         headers = {
             "X-Goog-FieldMask": "places.displayName,places.formattedAddress,places.location",
