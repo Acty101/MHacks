@@ -17,7 +17,7 @@ class GPlaceFinder:
             else os.environ.get("GPLACES_API_KEY")
         )
 
-    def query(self, query: str, num_return = 3) -> List[dict]:
+    def query(self, query: str, num_return = 3) -> List[dict], bool:
         """Search for information about places or restaurants"""
         headers = {
             "X-Goog-FieldMask": "places.displayName,places.formattedAddress,places.location",
@@ -28,7 +28,7 @@ class GPlaceFinder:
         response = requests.post(self.url, headers=headers, json=payload)
         if response.status_code == 200:
             items = response.json()["places"]
-            items = random.sample(items, num_return)
+            items = random.sample(items, min(num_return, len(items)))
             items = [
                 {
                     "name": item["displayName"]["text"],
@@ -40,4 +40,4 @@ class GPlaceFinder:
             return items
         else:
             print(f"Error: {response.status_code} - {response.text}")
-            return []
+            return [], False
