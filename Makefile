@@ -1,5 +1,4 @@
 run:
-	docker run test_langchain --gpus all --env-file .env
-
+	docker run --gpus all --env-file .env -it testlangchain
 build:
-	docker build -t test_langchain .
+	docker build -t testlangchain .
