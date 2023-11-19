@@ -1,7 +1,7 @@
 import os
 import requests
 import random
-from typing import List
+from typing import List, Tuple
 
 
 class GPlaceFinder:
@@ -17,10 +17,10 @@ class GPlaceFinder:
             else os.environ.get("GPLACES_API_KEY")
         )
 
-    def query(self, query: str, num_return = 3) -> List[dict]:
+    def query(self, query: str, num_return=2) -> Tuple[List[dict], List[dict]]:
         """Search for information about places or restaurants"""
         headers = {
-            "X-Goog-FieldMask": "places.displayName,places.formattedAddress,places.location",
+            "X-Goog-FieldMask": "places.displayName,places.formattedAddress,places.location,places.types",
             "X-Goog-Api-Key": self.gplaces_api_key,
             "Content-Type": "application/json",
         }
@@ -29,15 +29,25 @@ class GPlaceFinder:
         if response.status_code == 200:
             items = response.json()["places"]
             items = random.sample(items, min(num_return, len(items)))
-            items = [
-                {
+            exc = []
+            non_exc = []
+            for item in items:
+                i = {
                     "name": item["displayName"]["text"],
                     "address": item["formattedAddress"],
                     "location": item["location"],
                 }
-                for item in items
-            ]
-            return items
+                try:
+                    for typ in item["types"]:
+                        if typ == "restaurant" or typ == "food":
+                            exc.append(i)
+                            break
+                        elif typ == "point_of_interest" or typ == "establishment":
+                            non_exc.append(i)
+                            break
+                except KeyError:
+                    print(f"No type key found")
+            return exc, non_exc
         else:
             print(f"Error: {response.status_code} - {response.text}")
             return [], False
