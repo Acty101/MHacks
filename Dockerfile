@@ -21,4 +21,5 @@ COPY main.py .
 COPY gplace/ ./gplace/
 COPY LangChain/ ./LangChain/
 
-ENTRYPOINT [ "python3", "main.py"]
+# ENTRYPOINT [ "python", "manage.py", "runserver", "8001"]
+ENTRYPOINT [ "python3", "main.py" ]
