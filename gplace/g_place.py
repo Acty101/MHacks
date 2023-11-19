@@ -20,7 +20,7 @@ class GPlaceFinder:
     def query(self, query: str, num_return=2) -> Tuple[List[dict], List[dict]]:
         """Search for information about places or restaurants"""
         headers = {
-            "X-Goog-FieldMask": "places.displayName,places.formattedAddress,places.location,places.types",
+            "X-Goog-FieldMask": "places.displayName,places.formattedAddress,places.location,places.types,places.photos",
             "X-Goog-Api-Key": self.gplaces_api_key,
             "Content-Type": "application/json",
         }
@@ -36,6 +36,7 @@ class GPlaceFinder:
                     "name": item["displayName"]["text"],
                     "address": item["formattedAddress"],
                     "location": item["location"],
+                    "photo": item.get("photos", [{}])[0].get("name", "")
                 }
                 try:
                     for typ in item["types"]:
